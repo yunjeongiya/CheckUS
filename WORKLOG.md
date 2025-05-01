@@ -7,6 +7,24 @@
 
 ## 작업 내역
 
+### 2025-05-01: 학생 프로필 관리 기능 구현
+- [x] 학생 프로필 관련 엔티티 구현
+  - [x] StudentProfile 엔티티 클래스 구현
+  - [x] School 엔티티 클래스 구현
+- [x] Repository 구현
+  - [x] StudentProfileRepository 구현
+  - [x] SchoolRepository 구현
+- [x] 서비스 계층 구현
+  - [x] StudentProfileService 구현
+  - [x] SchoolService 구현
+- [x] REST API 구현
+  - [x] StudentProfileController 구현
+  - [x] SchoolController 구현
+- [x] 보안 유틸리티 구현
+  - [x] SecurityUtils 클래스 구현 (사용자 권한 검사 유틸리티)
+- [x] Git 브랜치 관리
+  - [x] feature/student-profile 브랜치 생성 및 작업
+
 ### 2025-05-01: Spring Security 및 JWT 인증 구현
 - [x] Spring Security 설정
   - [x] SecurityConfig 클래스 구현
@@ -53,9 +71,9 @@
 - [x] Spring Security 설정
   - [x] JWT 인증 구현
   - [x] 역할 기반 권한 관리 구현
-- [ ] 추가 엔티티 구현
-  - [ ] StudentProfile 엔티티
-  - [ ] School 엔티티
+- [x] 추가 엔티티 구현
+  - [x] StudentProfile 엔티티
+  - [x] School 엔티티
   - [ ] Class 엔티티
   - [ ] WeeklySchedule 엔티티
   - [ ] StudyTime 관련 엔티티
@@ -93,4 +111,4 @@
 
 ---
 
-최종 업데이트: 2025-05-01 (Spring Security 및 JWT 인증 구현 완료)
+최종 업데이트: 2025-05-01 (학생 프로필 관리 기능 구현 완료)
