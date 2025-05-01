@@ -40,9 +40,11 @@ public class StudentProfile {
      */
     public enum StudentStatus {
         INQUIRY("문의"),
+        COUNSELING_SCHEDULED("상담예약"),
         ENROLLED("재원"),
         WAITING("대기"),
-        WITHDRAWN("퇴원");
+        WITHDRAWN("퇴원"), 
+        UNREGISTERED("미등록");
 
         private final String displayName;
 
