@@ -29,6 +29,12 @@ public class User {
 
     private String password;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    
+    @Column(name = "discord_id")
+    private String discordId;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

@@ -65,7 +65,9 @@ public class AuthController {
                 jwt,
                 userDetails.getId(),
                 userDetails.getName(),
-                userDetails.getUsername()
+                userDetails.getUsername(),
+                userDetails.getPhoneNumber(),
+                userDetails.getDiscordId()
         );
 
         return ResponseEntity.ok(response);
@@ -82,6 +84,7 @@ public class AuthController {
         user.setName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setPhoneNumber(signUpRequest.getPhoneNumber());
 
         Set<String> strRoles = signUpRequest.getRoles();
         Set<Role> roles = new HashSet<>();

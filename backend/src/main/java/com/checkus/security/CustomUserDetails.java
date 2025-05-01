@@ -16,13 +16,17 @@ public class CustomUserDetails implements UserDetails {
     private String name;
     private String email;
     private String password;
+    private String phoneNumber;
+    private String discordId;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(Long id, String name, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(Long id, String name, String email, String password, String phoneNumber, String discordId, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.discordId = discordId;
         this.authorities = authorities;
     }
 
@@ -36,6 +40,8 @@ public class CustomUserDetails implements UserDetails {
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getPhoneNumber(),
+                user.getDiscordId(),
                 authorities
         );
     }
@@ -46,6 +52,14 @@ public class CustomUserDetails implements UserDetails {
     
     public String getName() {
         return name;
+    }
+    
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    
+    public String getDiscordId() {
+        return discordId;
     }
 
     @Override
