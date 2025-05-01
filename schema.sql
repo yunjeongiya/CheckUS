@@ -46,6 +46,7 @@ CREATE TABLE `role_permission` (
 CREATE TABLE `student_guardian` (
   `student_id` bigint COMMENT '학생 역할의 User만 허용',
   `guardian_id` bigint COMMENT '보호자 역할의 User만 허용',
+  `relationship` varchar(20) COMMENT 'ENUM: FATHER(부), MOTHER(모), OTHER(기타)',
   PRIMARY KEY (`student_id`, `guardian_id`)
 );
 
