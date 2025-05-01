@@ -7,6 +7,25 @@
 
 ## 작업 내역
 
+### 2025-05-01: Spring Security 및 JWT 인증 구현
+- [x] Spring Security 설정
+  - [x] SecurityConfig 클래스 구현
+  - [x] JWT 인증 구현
+    - [x] JwtTokenProvider 클래스 구현
+    - [x] JwtAuthenticationFilter 클래스 구현
+    - [x] JwtAuthenticationEntryPoint 클래스 구현
+  - [x] 역할 기반 권한 관리 구현
+    - [x] CustomUserDetails 클래스 구현
+    - [x] CustomUserDetailsService 클래스 구현
+- [x] User 관련 REST API 구현
+  - [x] 회원가입 API (AuthController)
+  - [x] 로그인 API (AuthController)
+  - [x] 사용자 정보 조회 API (AuthController)
+- [x] Git 브랜치 관리 설정
+  - [x] develop 브랜치 생성
+  - [x] feature/spring-security-config 브랜치 생성 및 작업
+  - [x] PR을 통한 작업 내역 관리
+
 ### 2025-05-01: 프로젝트 초기 설정
 - [x] 프로젝트 기본 구조 설정
   - [x] 루트 레벨 `.gitignore`, `README.md`, `package.json`, `settings.gradle` 생성
@@ -27,13 +46,13 @@
 ## 향후 작업 계획
 
 ### 백엔드
-- [ ] User 관련 REST API 구현
-  - [ ] 회원가입 API
-  - [ ] 로그인 API
-  - [ ] 사용자 정보 조회 API
-- [ ] Spring Security 설정
-  - [ ] JWT 인증 구현
-  - [ ] 역할 기반 권한 관리 구현
+- [x] User 관련 REST API 구현
+  - [x] 회원가입 API
+  - [x] 로그인 API
+  - [x] 사용자 정보 조회 API
+- [x] Spring Security 설정
+  - [x] JWT 인증 구현
+  - [x] 역할 기반 권한 관리 구현
 - [ ] 추가 엔티티 구현
   - [ ] StudentProfile 엔티티
   - [ ] School 엔티티
@@ -74,4 +93,4 @@
 
 ---
 
-최종 업데이트: 2025-05-01
+최종 업데이트: 2025-05-01 (Spring Security 및 JWT 인증 구현 완료)
