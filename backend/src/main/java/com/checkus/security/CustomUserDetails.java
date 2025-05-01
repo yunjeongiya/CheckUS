@@ -13,17 +13,17 @@ import java.util.stream.Collectors;
 public class CustomUserDetails implements UserDetails {
     
     private Long id;
+    private String username;
     private String name;
-    private String email;
     private String password;
     private String phoneNumber;
     private String discordId;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(Long id, String name, String email, String password, String phoneNumber, String discordId, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(Long id, String username, String name, String password, String phoneNumber, String discordId, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
+        this.username = username;
         this.name = name;
-        this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.discordId = discordId;
@@ -37,8 +37,8 @@ public class CustomUserDetails implements UserDetails {
 
         return new CustomUserDetails(
                 user.getId(),
+                user.getUsername(),
                 user.getName(),
-                user.getEmail(),
                 user.getPassword(),
                 user.getPhoneNumber(),
                 user.getDiscordId(),
@@ -74,7 +74,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;  // Using email as the username
+        return username;  // Using username as the login identifier
     }
 
     @Override

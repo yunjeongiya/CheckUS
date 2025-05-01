@@ -51,7 +51,7 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
+                        loginRequest.getUsername(),
                         loginRequest.getPassword()
                 )
         );
@@ -64,8 +64,8 @@ public class AuthController {
         JwtAuthResponse response = new JwtAuthResponse(
                 jwt,
                 userDetails.getId(),
-                userDetails.getName(),
                 userDetails.getUsername(),
+                userDetails.getName(),
                 userDetails.getPhoneNumber(),
                 userDetails.getDiscordId()
         );
@@ -75,14 +75,14 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>("이미 사용 중인 이메일입니다.", HttpStatus.BAD_REQUEST);
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return new ResponseEntity<>("이미 사용 중인 아이디입니다.", HttpStatus.BAD_REQUEST);
         }
 
         // Creating user's account
         User user = new User();
+        user.setUsername(signUpRequest.getUsername());
         user.setName(signUpRequest.getName());
-        user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
 

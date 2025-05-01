@@ -11,23 +11,23 @@ public class JwtAuthResponse {
     private String tokenType = "Bearer";
     private String accessToken;
     private Long userId;
+    private String username;
     private String name;
-    private String email;
     private String phoneNumber;
     private String discordId;
     
-    public JwtAuthResponse(String accessToken, Long userId, String name, String email) {
+    public JwtAuthResponse(String accessToken, Long userId, String username, String name) {
         this.accessToken = accessToken;
         this.userId = userId;
+        this.username = username;
         this.name = name;
-        this.email = email;
     }
     
-    public JwtAuthResponse(String accessToken, Long userId, String name, String email, String phoneNumber, String discordId) {
+    public JwtAuthResponse(String accessToken, Long userId, String username, String name, String phoneNumber, String discordId) {
         this.accessToken = accessToken;
         this.userId = userId;
+        this.username = username;
         this.name = name;
-        this.email = email;
         this.phoneNumber = phoneNumber;
         this.discordId = discordId;
     }

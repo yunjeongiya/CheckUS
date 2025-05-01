@@ -1,9 +1,9 @@
 CREATE TABLE `user` (
   `id` bigint AUTO_INCREMENT PRIMARY KEY,
+  `username` varchar(50) UNIQUE,
   `name` varchar(255),
-  `email` varchar(255) UNIQUE,
-  `password` varchar(255),
   `phone_number` varchar(20),
+  `password` varchar(255),
   `discord_id` varchar(100),
   `created_at` timestamp DEFAULT (now())
 );

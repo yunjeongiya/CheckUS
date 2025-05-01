@@ -21,16 +21,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(unique = true)
+    private String username;
 
     private String name;
 
-    @Column(unique = true)
-    private String email;
-
-    private String password;
-
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    private String password;
     
     @Column(name = "discord_id")
     private String discordId;
