@@ -33,9 +33,15 @@ export interface TodoItem {
   id: string;
   title: string;
   description: string;
+  typeId: string;
   parentId: string | null;
-  type: 'category' | 'todo';
+  isLeaf: boolean;
   children: TodoItem[];
+  materials: Array<{
+    title: string;
+    isVideo: boolean;
+    completionCondition: string;
+  }>;
   createdAt: string;
   updatedAt: string;
 }

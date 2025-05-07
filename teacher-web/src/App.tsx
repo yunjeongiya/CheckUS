@@ -26,8 +26,7 @@ import StudentFormPage from './pages/student/StudentFormPage';
 import StudentDetailPage from './pages/student/StudentDetailPage';
 
 // Todo Pages
-import TodoManagementPage from './pages/todo/TodoManagementPage';
-import TodoFormPage from './pages/todo/TodoFormPage';
+import TaskManagementPage from './pages/task/TaskManagementPage';
 
 const App: React.FC = () => {
   return (
@@ -60,9 +59,7 @@ const App: React.FC = () => {
           <Route path="/students/:id/edit" element={<StudentFormPage />} />
           
           {/* Todo Routes */}
-          <Route path="/todos" element={<TodoManagementPage />} />
-          <Route path="/todos/new" element={<TodoFormPage />} />
-          <Route path="/todos/:id" element={<TodoFormPage />} />
+          <Route path="/todos" element={<TaskManagementPage />} />
           
           {/* Default Route */}
           <Route path="/" element={<Navigate to="/classes" replace />} />

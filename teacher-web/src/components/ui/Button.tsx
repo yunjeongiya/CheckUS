@@ -28,10 +28,10 @@ const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const variantClasses = {
-    primary: `bg-${colors.primary} text-white hover:bg-${colors.primary}/90 focus:ring-${colors.primary}`,
-    secondary: `bg-${colors.primary}/80 text-white hover:bg-${colors.primary}/70 focus:ring-${colors.primary}`,
-    danger: 'bg-gray-700 text-white hover:bg-gray-800 focus:ring-gray-700',
-    outline: `border border-gray-300 bg-transparent text-gray-700 hover:bg-${colors.background1} focus:ring-gray-500`,
+    primary: 'bg-gray-900 text-white hover:bg-gray-800 focus:ring-gray-900',
+    secondary: 'bg-gray-700 text-white hover:bg-gray-600 focus:ring-gray-700',
+    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600',
+    outline: 'border-2 border-gray-500 bg-white text-gray-800 hover:bg-gray-100 focus:ring-gray-500',
   };
   
   const sizeClasses = {
@@ -63,7 +63,7 @@ const Button: React.FC<ButtonProps> = ({
         </svg>
       )}
       {!isLoading && leftIcon && <span className="mr-2">{leftIcon}</span>}
-      {children}
+      <span>{children}</span>
       {!isLoading && rightIcon && <span className="ml-2">{rightIcon}</span>}
     </button>
   );
