@@ -6,6 +6,7 @@ import Input from '../../components/ui/Input';
 import { TodoItem } from '../../types';
 import { colors } from '../../styles/colors';
 import TaskForm from './TaskForm';
+import ExcelTaskUploader from './ExcelTaskUploader';
 import classNames from 'classnames';
 
 const mockTodoItems: TodoItem[] = [
@@ -292,6 +293,7 @@ const TodoManagementPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<string>(mockTaskTypes[0].id);
   const [addIsLeaf, setAddIsLeaf] = useState<boolean | null>(null);
   const [showRootAddUI, setShowRootAddUI] = useState<boolean>(false);
+  const [view, setView] = useState<'tree' | 'excel'>('tree');
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -359,6 +361,24 @@ const TodoManagementPage: React.FC = () => {
     setAddIsLeaf(isLeaf);
   };
 
+  const handleTasksUploaded = (newTasks: Partial<TodoItem>[]) => {
+    // 엑셀에서 업로드된 작업을 처리
+    const createdTasks: TodoItem[] = newTasks.map(task => ({
+      id: Math.random().toString(36).substr(2, 9),
+      title: task.title || '제목 없음',
+      description: task.description || '',
+      typeId: selectedTab,
+      parentId: task.parentId || null,
+      isLeaf: task.isLeaf || false,
+      materials: task.materials || [],
+      children: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }));
+
+    setTodos(prev => [...prev, ...createdTasks]);
+  };
+
   return (
     <AppLayout title="할일 DB 관리">
       {/* Tab Bar */}
@@ -376,73 +396,111 @@ const TodoManagementPage: React.FC = () => {
           </button>
         ))}
       </div>
-      {/* Tab Content */}
-      <div className={`bg-${colors.background2} shadow-sm rounded-lg overflow-x-auto`}>
-        {isLoading ? (
-          <div className="flex justify-center my-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-          </div>
-        ) : (
-          <div className="p-6">
-            <div>
-              {tree.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">등록된 할일이 없습니다.</div>
-              ) : (
-                tree.map(node => (
-                  <TaskTreeNode
-                    key={node.id}
-                    node={node}
-                    onEdit={handleEdit}
-                    onAdd={handleAdd}
-                    onDelete={handleDelete}
-                    editingId={editingId}
-                    addingId={addingId}
-                    addIsLeaf={addIsLeaf}
-                    handleLeafChoice={handleLeafChoice}
-                    handleFormSubmit={handleFormSubmit}
-                    handleFormCancel={handleFormCancel}
-                  />
-                ))
-              )}
-            </div>
-            {/* 새 할일 추가 button at the bottom, left-aligned */}
-            <div className="mt-6 flex justify-start">
-              <Button variant="primary" onClick={() => handleAdd(null)} className="inline-flex items-center">
-                <Plus size={16} className="mr-2" />
-                <span>새 할일 추가</span>
-              </Button>
-            </div>
-            
-            {/* 루트 레벨에서 새 할일 추가 시 표시되는 UI */}
-            {showRootAddUI && addIsLeaf === null && (
-              <div className="mt-4 flex flex-col items-center gap-4 py-4 border border-gray-200 rounded-md">
-                <div className="text-lg font-medium">실제 과제(leaf)로 만들까요?</div>
-                <div className="flex gap-4">
-                  <Button variant="primary" onClick={() => handleLeafChoice(true)} className="inline-flex items-center">
-                    <span>실제 과제</span>
-                  </Button>
-                  <Button variant="primary" onClick={() => handleLeafChoice(false)} className="inline-flex items-center">
-                    <span>카테고리</span>
+
+      {/* View Toggle */}
+      <div className="flex justify-end mb-4">
+        <div className="inline-flex rounded-md shadow-sm">
+          <button
+            type="button"
+            className={`px-4 py-2 text-sm font-medium rounded-l-lg ${
+              view === 'tree'
+                ? 'bg-gray-900 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            } border border-gray-300`}
+            onClick={() => setView('tree')}
+          >
+            트리 뷰
+          </button>
+          <button
+            type="button"
+            className={`px-4 py-2 text-sm font-medium rounded-r-lg ${
+              view === 'excel'
+                ? 'bg-gray-900 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            } border border-gray-300 border-l-0`}
+            onClick={() => setView('excel')}
+          >
+            엑셀 업로드
+          </button>
+        </div>
+      </div>
+
+      {/* Content based on view */}
+      {isLoading ? (
+        <div className="flex justify-center my-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      ) : (
+        <>
+          {view === 'tree' ? (
+            <div className={`bg-${colors.background2} shadow-sm rounded-lg overflow-x-auto`}>
+              <div className="p-6">
+                <div>
+                  {tree.length === 0 ? (
+                    <div className="text-center py-8 text-gray-500">등록된 할일이 없습니다.</div>
+                  ) : (
+                    tree.map(node => (
+                      <TaskTreeNode
+                        key={node.id}
+                        node={node}
+                        onEdit={handleEdit}
+                        onAdd={handleAdd}
+                        onDelete={handleDelete}
+                        editingId={editingId}
+                        addingId={addingId}
+                        addIsLeaf={addIsLeaf}
+                        handleLeafChoice={handleLeafChoice}
+                        handleFormSubmit={handleFormSubmit}
+                        handleFormCancel={handleFormCancel}
+                      />
+                    ))
+                  )}
+                </div>
+                {/* 새 할일 추가 button at the bottom, left-aligned */}
+                <div className="mt-6 flex justify-start">
+                  <Button variant="primary" onClick={() => handleAdd(null)} className="inline-flex items-center">
+                    <Plus size={16} className="mr-2" />
+                    <span>새 할일 추가</span>
                   </Button>
                 </div>
+                
+                {/* 루트 레벨에서 새 할일 추가 시 표시되는 UI */}
+                {showRootAddUI && addIsLeaf === null && (
+                  <div className="mt-4 flex flex-col items-center gap-4 py-4 border border-gray-200 rounded-md">
+                    <div className="text-lg font-medium">실제 과제(leaf)로 만들까요?</div>
+                    <div className="flex gap-4">
+                      <Button variant="primary" onClick={() => handleLeafChoice(true)} className="inline-flex items-center">
+                        <span>실제 과제</span>
+                      </Button>
+                      <Button variant="primary" onClick={() => handleLeafChoice(false)} className="inline-flex items-center">
+                        <span>카테고리</span>
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                
+                {/* 선택 후 표시되는 폼 */}
+                {showRootAddUI && addIsLeaf !== null && (
+                  <div className="mt-4 border border-gray-200 rounded-md p-4">
+                    <TaskForm
+                      initialData={{ isLeaf: addIsLeaf, parentId: null }}
+                      onSubmit={data => handleFormSubmit('add', data, null)}
+                      onCancel={handleFormCancel}
+                      submitLabel="추가"
+                      forceIsLeaf={addIsLeaf}
+                    />
+                  </div>
+                )}
               </div>
-            )}
-            
-            {/* 선택 후 표시되는 폼 */}
-            {showRootAddUI && addIsLeaf !== null && (
-              <div className="mt-4 border border-gray-200 rounded-md p-4">
-                <TaskForm
-                  initialData={{ isLeaf: addIsLeaf, parentId: null }}
-                  onSubmit={data => handleFormSubmit('add', data, null)}
-                  onCancel={handleFormCancel}
-                  submitLabel="추가"
-                  forceIsLeaf={addIsLeaf}
-                />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+            </div>
+          ) : (
+            <ExcelTaskUploader 
+              onTasksUploaded={handleTasksUploaded} 
+              typeId={selectedTab} 
+            />
+          )}
+        </>
+      )}
     </AppLayout>
   );
 };
