@@ -1,169 +1,172 @@
-CREATE TABLE `User` (
-  `id` integer PRIMARY KEY,
+CREATE TABLE `user` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
+  `username` varchar(50) UNIQUE,
   `name` varchar(255),
-  `email` varchar(255) UNIQUE,
+  `phone_number` varchar(20),
   `password` varchar(255),
+  `discord_id` varchar(100),
   `created_at` timestamp DEFAULT (now())
 );
 
-CREATE TABLE `StudentProfile` (
-  `user_id` integer PRIMARY KEY COMMENT '학생 역할의 User만 허용',
-  `status` varchar(255) COMMENT 'ENUM: 문의/재원/대기/퇴원',
-  `school_id` integer,
+CREATE TABLE `student_profile` (
+  `user_id` bigint PRIMARY KEY COMMENT '학생 역할의 User만 허용',
+  `status` varchar(20) COMMENT 'ENUM: INQUIRY(문의), COUNSELING_SCHEDULED(상담예약), ENROLLED(재원), WAITING(대기), WITHDRAWN(퇴원), UNREGISTERED(미등록)',
+  `school_id` bigint,
   `grade` integer,
-  `gender` varchar(255) COMMENT 'ENUM: 남/여/기타'
+  `gender` varchar(20) COMMENT 'ENUM: MALE(남), FEMALE(여), OTHER(기타)'
 );
 
-CREATE TABLE `School` (
-  `id` integer PRIMARY KEY,
+CREATE TABLE `school` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255) UNIQUE NOT NULL
 );
 
-CREATE TABLE `Role` (
-  `id` integer PRIMARY KEY,
+CREATE TABLE `role` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255) UNIQUE COMMENT '학생, 교사, 보호자 등의 역할'
 );
 
-CREATE TABLE `UserRole` (
-  `user_id` integer,
-  `role_id` integer,
+CREATE TABLE `user_role` (
+  `user_id` bigint,
+  `role_id` bigint,
   PRIMARY KEY (`user_id`, `role_id`)
 );
 
-CREATE TABLE `Permission` (
-  `id` integer PRIMARY KEY,
+CREATE TABLE `permission` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255) UNIQUE
 );
 
-CREATE TABLE `RolePermission` (
-  `role_id` integer,
-  `permission_id` integer,
+CREATE TABLE `role_permission` (
+  `role_id` bigint,
+  `permission_id` bigint,
   PRIMARY KEY (`role_id`, `permission_id`)
 );
 
-CREATE TABLE `StudentGuardian` (
-  `student_id` integer COMMENT '학생 역할의 User만 허용',
-  `guardian_id` integer COMMENT '보호자 역할의 User만 허용',
+CREATE TABLE `student_guardian` (
+  `student_id` bigint COMMENT '학생 역할의 User만 허용',
+  `guardian_id` bigint COMMENT '보호자 역할의 User만 허용',
+  `relationship` varchar(20) COMMENT 'ENUM: FATHER(부), MOTHER(모), OTHER(기타)',
   PRIMARY KEY (`student_id`, `guardian_id`)
 );
 
-CREATE TABLE `Class` (
-  `id` integer PRIMARY KEY,
+CREATE TABLE `class` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255) NOT NULL
 );
 
-CREATE TABLE `TeacherClass` (
-  `teacher_id` integer COMMENT '교사 역할의 User만 허용',
-  `class_id` integer,
+CREATE TABLE `teacher_class` (
+  `teacher_id` bigint COMMENT '교사 역할의 User만 허용',
+  `class_id` bigint,
   PRIMARY KEY (`teacher_id`, `class_id`)
 );
 
-CREATE TABLE `StudentClass` (
-  `student_id` integer COMMENT '학생 역할의 User만 허용',
-  `class_id` integer,
+CREATE TABLE `student_class` (
+  `student_id` bigint COMMENT '학생 역할의 User만 허용',
+  `class_id` bigint,
   PRIMARY KEY (`student_id`, `class_id`)
 );
 
-CREATE TABLE `WeeklySchedule` (
-  `id` integer PRIMARY KEY,
-  `student_id` integer COMMENT '학생 역할의 User만 허용',
+CREATE TABLE `weekly_schedule` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
+  `student_id` bigint COMMENT '학생 역할의 User만 허용',
   `day_of_week` integer COMMENT '0-6: 월-일',
   `start_time` time,
   `end_time` time,
   `activity` varchar(255)
 );
 
-CREATE TABLE `AssignedStudyTime` (
-  `id` integer PRIMARY KEY,
-  `student_id` integer COMMENT '학생 역할의 User만 허용',
+CREATE TABLE `assigned_study_time` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
+  `student_id` bigint COMMENT '학생 역할의 User만 허용',
   `start_time` timestamp,
   `end_time` timestamp,
   `activity` varchar(255),
-  `assigned_by` integer COMMENT '교사 역할의 User만 허용'
+  `assigned_by` bigint COMMENT '교사 역할의 User만 허용'
 );
 
-CREATE TABLE `ActualStudyTime` (
-  `id` integer PRIMARY KEY,
-  `student_id` integer COMMENT '학생 역할의 User만 허용',
+CREATE TABLE `actual_study_time` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
+  `student_id` bigint COMMENT '학생 역할의 User만 허용',
   `start_time` timestamp,
   `end_time` timestamp,
   `activity` varchar(255),
   `source` varchar(255) COMMENT '기록 출처(예: 디스코드)'
 );
 
-CREATE TABLE `TaskType` (
-  `id` integer PRIMARY KEY,
+CREATE TABLE `task_type` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255) NOT NULL
 );
 
-CREATE TABLE `Task` (
-  `id` integer PRIMARY KEY,
-  `type_id` integer,
-  `parent_id` integer,
+CREATE TABLE `task` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
+  `type_id` bigint,
+  `parent_id` bigint,
   `title` varchar(255) NOT NULL,
   `description` text,
   `is_leaf` boolean DEFAULT false COMMENT '실제 과제인지 여부'
 );
 
-CREATE TABLE `Material` (
-  `id` integer PRIMARY KEY,
-  `task_id` integer,
+CREATE TABLE `material` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
+  `task_id` bigint,
   `title` varchar(255) NOT NULL,
   `is_video` boolean,
   `completion_condition` varchar(255)
 );
 
-CREATE TABLE `AssignedTask` (
-  `id` integer PRIMARY KEY,
-  `task_id` integer COMMENT '원본 과제와의 논리적 연결',
-  `student_id` integer COMMENT '학생 역할의 User만 허용',
-  `teacher_id` integer COMMENT '교사 역할의 User만 허용',
+CREATE TABLE `assigned_task` (
+  `id` bigint AUTO_INCREMENT PRIMARY KEY,
+  `task_id` bigint COMMENT '원본 과제와의 논리적 연결',
+  `student_id` bigint COMMENT '학생 역할의 User만 허용',
+  `teacher_id` bigint COMMENT '교사 역할의 User만 허용',
   `title` varchar(255) NOT NULL,
   `description` text,
   `assigned_date` timestamp DEFAULT (now()),
   `due_date` timestamp
 );
 
-ALTER TABLE `StudentProfile` ADD FOREIGN KEY (`user_id`) REFERENCES `User` (`id`);
+ALTER TABLE `student_profile` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `StudentProfile` ADD FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
+ALTER TABLE `student_profile` ADD FOREIGN KEY (`school_id`) REFERENCES `school` (`id`);
 
-ALTER TABLE `UserRole` ADD FOREIGN KEY (`user_id`) REFERENCES `User` (`id`);
+ALTER TABLE `user_role` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `UserRole` ADD FOREIGN KEY (`role_id`) REFERENCES `Role` (`id`);
+ALTER TABLE `user_role` ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
 
-ALTER TABLE `RolePermission` ADD FOREIGN KEY (`role_id`) REFERENCES `Role` (`id`);
+ALTER TABLE `role_permission` ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
 
-ALTER TABLE `RolePermission` ADD FOREIGN KEY (`permission_id`) REFERENCES `Permission` (`id`);
+ALTER TABLE `role_permission` ADD FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`);
 
-ALTER TABLE `StudentGuardian` ADD FOREIGN KEY (`student_id`) REFERENCES `User` (`id`);
+ALTER TABLE `student_guardian` ADD FOREIGN KEY (`student_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `StudentGuardian` ADD FOREIGN KEY (`guardian_id`) REFERENCES `User` (`id`);
+ALTER TABLE `student_guardian` ADD FOREIGN KEY (`guardian_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `TeacherClass` ADD FOREIGN KEY (`teacher_id`) REFERENCES `User` (`id`);
+ALTER TABLE `teacher_class` ADD FOREIGN KEY (`teacher_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `TeacherClass` ADD FOREIGN KEY (`class_id`) REFERENCES `Class` (`id`);
+ALTER TABLE `teacher_class` ADD FOREIGN KEY (`class_id`) REFERENCES `class` (`id`);
 
-ALTER TABLE `StudentClass` ADD FOREIGN KEY (`student_id`) REFERENCES `User` (`id`);
+ALTER TABLE `student_class` ADD FOREIGN KEY (`student_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `StudentClass` ADD FOREIGN KEY (`class_id`) REFERENCES `Class` (`id`);
+ALTER TABLE `student_class` ADD FOREIGN KEY (`class_id`) REFERENCES `class` (`id`);
 
-ALTER TABLE `WeeklySchedule` ADD FOREIGN KEY (`student_id`) REFERENCES `User` (`id`);
+ALTER TABLE `weekly_schedule` ADD FOREIGN KEY (`student_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `AssignedStudyTime` ADD FOREIGN KEY (`student_id`) REFERENCES `User` (`id`);
+ALTER TABLE `assigned_study_time` ADD FOREIGN KEY (`student_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `AssignedStudyTime` ADD FOREIGN KEY (`assigned_by`) REFERENCES `User` (`id`);
+ALTER TABLE `assigned_study_time` ADD FOREIGN KEY (`assigned_by`) REFERENCES `user` (`id`);
 
-ALTER TABLE `ActualStudyTime` ADD FOREIGN KEY (`student_id`) REFERENCES `User` (`id`);
+ALTER TABLE `actual_study_time` ADD FOREIGN KEY (`student_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `Task` ADD FOREIGN KEY (`type_id`) REFERENCES `TaskType` (`id`);
+ALTER TABLE `task` ADD FOREIGN KEY (`type_id`) REFERENCES `task_type` (`id`);
 
-ALTER TABLE `Task` ADD FOREIGN KEY (`parent_id`) REFERENCES `Task` (`id`);
+ALTER TABLE `task` ADD FOREIGN KEY (`parent_id`) REFERENCES `task` (`id`);
 
-ALTER TABLE `Material` ADD FOREIGN KEY (`task_id`) REFERENCES `Task` (`id`);
+ALTER TABLE `material` ADD FOREIGN KEY (`task_id`) REFERENCES `task` (`id`);
 
-ALTER TABLE `AssignedTask` ADD FOREIGN KEY (`task_id`) REFERENCES `Task` (`id`);
+ALTER TABLE `assigned_task` ADD FOREIGN KEY (`task_id`) REFERENCES `task` (`id`);
 
-ALTER TABLE `AssignedTask` ADD FOREIGN KEY (`student_id`) REFERENCES `User` (`id`);
+ALTER TABLE `assigned_task` ADD FOREIGN KEY (`student_id`) REFERENCES `user` (`id`);
 
-ALTER TABLE `AssignedTask` ADD FOREIGN KEY (`teacher_id`) REFERENCES `User` (`id`);
+ALTER TABLE `assigned_task` ADD FOREIGN KEY (`teacher_id`) REFERENCES `user` (`id`);
